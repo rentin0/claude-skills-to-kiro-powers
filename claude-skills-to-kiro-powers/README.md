@@ -9,6 +9,7 @@ Claude Code Skills を Kiro Powers に変換する CLI ツール（MVP）
 - 📦 **補助ファイル対応** - REFERENCE.md、scripts、resources をコピー
 - 🏠 **ホームディレクトリ対応** - `~/.kiro/powers/` に自動配置
 - 🔗 **一括変換** - 複数のスキルを同時に変換
+- 🎨 **豪華な TUI** - Ink を使用した美しいターミナルインターフェース
 
 ## インストール
 
@@ -18,28 +19,64 @@ bun install
 
 ## 使用方法
 
-### skillsmp.com からスキルをインストール・変換
+### 1. シンプル CLI（従来型）
 
 ```bash
+# ローカルのスキルを変換
+bun run src/cli.ts --convert ./my-skill
+
+# 出力先を指定
+bun run src/cli.ts --convert ./my-skill --output ./output/my-power
+
+# skillsmp.com からインストール・変換
 bun run src/cli.ts --install database-query-helper
 ```
 
-### ローカルのスキルを変換
+### 2. TUI CLI（豪華版）
 
 ```bash
-bun run src/cli.ts --convert ./my-skill
+# ローカルのスキルを変換（TUI 表示）
+bun run src/cli-tui.tsx --convert ./my-skill
+
+# skillsmp.com からインストール・変換（TUI 表示）
+bun run src/cli-tui.tsx --install database-query-helper
 ```
 
-### 出力先を指定
+### 3. インタラクティブ TUI（メニュー形式）
 
 ```bash
-bun run src/cli.ts --convert ./my-skill --output ./output/my-power
+# メニュー形式で操作
+bun run src/cli-interactive.tsx
 ```
 
-### 複数のスキルを一括変換
+このモードでは、以下の操作が可能です：
+- ローカルのスキルを変換
+- skillsmp.com からインストール・変換
+- 出力先ディレクトリを指定
+
+### 4. 複数のスキルを一括変換
 
 ```bash
 bun run scripts/batch-convert.ts database-query-helper code-review-assistant
+```
+
+## ビルド
+
+```bash
+bun run build
+```
+
+ビルド後は以下のコマンドで実行できます：
+
+```bash
+# シンプル CLI
+bun dist/cli.js --convert ./my-skill
+
+# TUI CLI
+bun dist/cli-tui.js --convert ./my-skill
+
+# インタラクティブ TUI
+bun dist/cli-interactive.js
 ```
 
 ## 変換ルール
@@ -57,15 +94,26 @@ bun run scripts/batch-convert.ts database-query-helper code-review-assistant
 ```
 claude-skills-to-kiro-powers/
 ├── src/
-│   ├── cli.ts          # CLI エントリーポイント
-│   ├── converter.ts    # 変換ロジック
-│   ├── downloader.ts   # ダウンロードロジック
-│   └── utils.ts        # ユーティリティ関数
+│   ├── cli.ts                  # シンプル CLI
+│   ├── cli-tui.tsx             # TUI CLI
+│   ├── cli-interactive.tsx     # インタラクティブ TUI
+│   ├── converter.ts            # 変換ロジック
+│   ├── downloader.ts           # ダウンロードロジック
+│   ├── utils.ts                # ユーティリティ関数
+│   └── ui/
+│       ├── index.tsx           # UI コンポーネント
+│       ├── header.tsx          # ヘッダー
+│       ├── status.tsx          # ステータス表示
+│       ├── progress.tsx        # プログレスバー
+│       ├── result-table.tsx    # 結果テーブル
+│       ├── summary.tsx         # サマリー
+│       └── menu.tsx            # メニュー
 ├── scripts/
-│   └── batch-convert.ts # 一括変換スクリプト
+│   └── batch-convert.ts        # 一括変換スクリプト
 ├── test/
-│   └── converter.test.ts # テストケース
-├── test-skill/         # テスト用スキル
+│   └── converter.test.ts       # テストケース
+├── dist/                       # ビルド済みバイナリ
+├── test-skill/                 # テスト用スキル
 ├── package.json
 └── README.md
 ```

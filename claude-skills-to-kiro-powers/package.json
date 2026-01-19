@@ -4,15 +4,26 @@
   "description": "Claude Code Skills を Kiro Powers に変換する CLI ツール",
   "type": "module",
   "bin": {
-    "skills-to-powers": "./dist/cli.js"
+    "skills-to-powers": "./dist/cli.js",
+    "skills-to-powers-tui": "./dist/cli-tui.js",
+    "skills-to-powers-interactive": "./dist/cli-interactive.js"
   },
   "scripts": {
     "dev": "bun run src/cli.ts",
-    "build": "bun build src/cli.ts --outfile dist/cli.js --target bun",
+    "dev:tui": "bun run src/cli-tui.tsx",
+    "dev:interactive": "bun run src/cli-interactive.tsx",
+    "build": "bun build src/cli.ts --outfile dist/cli.js --target bun && bun build src/cli-tui.tsx --outfile dist/cli-tui.js --target bun && bun build src/cli-interactive.tsx --outfile dist/cli-interactive.js --target bun",
     "test": "bun test",
     "clean": "rm -rf dist test-output*"
   },
   "dependencies": {
+    "ink": "^6.6.0",
+    "ink-select-input": "^6.2.0",
+    "ink-spinner": "^5.0.0",
+    "ink-table": "^3.1.0",
+    "ink-text-input": "^6.0.0",
+    "react": "^19.2.3",
+    "react-devtools-core": "^7.0.1",
     "yaml": "^2.4.1"
   },
   "devDependencies": {

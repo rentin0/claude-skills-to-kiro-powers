@@ -41,32 +41,61 @@
 
 #### TODO 2.2 ～ 2.4: 今後の実装予定
 
+### Phase 3: TUI 実装 ✅（新規追加）
+
+#### 豪華な TUI インターフェース
+- **Ink + React** を使用した美しいターミナルUI
+- **3 つの CLI モード**：
+  1. **シンプル CLI** - 従来型のコマンドラインツール
+  2. **TUI CLI** - 豪華なプログレスバー表示
+  3. **インタラクティブ TUI** - メニュー形式の対話的操作
+
+#### UI コンポーネント
+- ✅ Header - 豪華なヘッダー表示
+- ✅ Status - ステータスアイコン付き表示
+- ✅ Progress - プログレスバー表示
+- ✅ ResultTable - 結果テーブル表示
+- ✅ Summary - 変換完了サマリー
+- ✅ Menu - メニュー選択（実装済み）
+
 ## 🏗️ プロジェクト構造
 
 ```
 claude-skills-to-kiro-powers/
 ├── src/
-│   ├── cli.ts              # CLI エントリーポイント
-│   ├── converter.ts        # 変換ロジック（SKILL.md → POWER.md）
-│   ├── downloader.ts       # ダウンロードロジック（skillsmp.com API）
-│   └── utils.ts            # ユーティリティ関数
+│   ├── cli.ts                  # シンプル CLI
+│   ├── cli-tui.tsx             # TUI CLI（豪華版）
+│   ├── cli-interactive.tsx     # インタラクティブ TUI
+│   ├── converter.ts            # 変換ロジック
+│   ├── downloader.ts           # ダウンロードロジック
+│   ├── utils.ts                # ユーティリティ関数
+│   └── ui/
+│       ├── index.tsx           # UI コンポーネント
+│       ├── header.tsx          # ヘッダー
+│       ├── status.tsx          # ステータス表示
+│       ├── progress.tsx        # プログレスバー
+│       ├── result-table.tsx    # 結果テーブル
+│       ├── summary.tsx         # サマリー
+│       └── menu.tsx            # メニュー
 ├── scripts/
-│   └── batch-convert.ts    # 一括変換スクリプト
+│   └── batch-convert.ts        # 一括変換スクリプト
 ├── test/
-│   └── converter.test.ts   # テストケース（3 個、全て成功）
+│   └── converter.test.ts       # テストケース
 ├── dist/
-│   └── cli.js              # ビルド済みバイナリ
-├── test-skill/             # テスト用スキル
-├── test-output/            # テスト出力
+│   ├── cli.js                  # ビルド済みバイナリ
+│   ├── cli-tui.js              # TUI ビルド済みバイナリ
+│   └── cli-interactive.js      # インタラクティブ TUI ビルド済み
+├── test-skill/                 # テスト用スキル
+├── test-output/                # テスト出力
 ├── package.json
 ├── README.md
-├── IMPLEMENTATION.md       # このファイル
+├── IMPLEMENTATION.md           # このファイル
 └── .gitignore
 ```
 
 ## 🚀 使用方法
 
-### ローカルのスキルを変換
+### シンプル CLI
 
 ```bash
 # 開発モード
@@ -74,6 +103,26 @@ bun run src/cli.ts --convert ./test-skill --output ./test-output
 
 # ビルド済みバイナリ
 bun dist/cli.js --convert ./test-skill --output ./test-output
+```
+
+### TUI CLI（豪華版）
+
+```bash
+# 開発モード
+bun run src/cli-tui.tsx --convert ./test-skill --output ./test-output
+
+# ビルド済みバイナリ
+bun dist/cli-tui.js --convert ./test-skill --output ./test-output
+```
+
+### インタラクティブ TUI
+
+```bash
+# 開発モード
+bun run src/cli-interactive.tsx
+
+# ビルド済みバイナリ
+bun dist/cli-interactive.js
 ```
 
 ### 複数のスキルを一括変換
@@ -130,10 +179,25 @@ author: Claude Code Skills
 
 ## 📊 実装統計
 
-- **ファイル数**: 7 個（src 4 個、scripts 1 個、test 1 個、その他 1 個）
-- **コード行数**: 約 400 行
+- **ファイル数**: 16 個（src 9 個、scripts 1 個、test 1 個、dist 3 個、その他 2 個）
+- **コード行数**: 約 800 行
 - **テストケース**: 3 個
-- **依存関係**: yaml（YAML パース）
+- **依存関係**: yaml、ink、react、ink-text-input、ink-select-input、react-devtools-core
+
+## 🎨 TUI の特徴
+
+### ビジュアル要素
+- 🎯 カラフルなヘッダー（シアン色）
+- 📊 プログレスバー（グリーン色）
+- ✅ ステータスアイコン（成功/失敗/情報）
+- 📋 結果テーブル（ボーダー付き）
+- 📈 サマリー表示（処理時間、成功/失敗数）
+
+### ユーザーエクスペリエンス
+- リアルタイムプログレス表示
+- 処理ステップの可視化
+- 詳細な結果レポート
+- インタラクティブなメニュー操作
 
 ## 🎯 次のステップ
 
@@ -160,6 +224,11 @@ author: Claude Code Skills
 - Node.js 互換性
 - バイナリ配布が容易
 
+### TUI ライブラリの選択
+- **Ink** - React ベースの TUI フレームワーク
+- **ink-text-input** - テキスト入力コンポーネント
+- **ink-select-input** - メニュー選択コンポーネント
+
 ### 変換ロジックの特徴
 - YAML frontmatter の厳密なパース
 - 日本語対応のキーワード抽出
@@ -177,3 +246,4 @@ author: Claude Code Skills
 - skillsmp.com API の実装確認が必要
 - 現在はローカルのスキルファイルからの変換に対応
 - API 実装後は自動ダウンロード機能が有効になる
+- TUI は Ink の制限により、一部のターミナルで表示が異なる可能性がある
