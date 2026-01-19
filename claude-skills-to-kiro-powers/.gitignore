@@ -1,0 +1,28 @@
+# 依存関係
+node_modules/
+bun.lock
+
+# ビルド出力
+dist/
+build/
+
+# テスト出力
+test-output*/
+
+# キャッシュ
+.cache/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 環境変数
+.env
+.env.local

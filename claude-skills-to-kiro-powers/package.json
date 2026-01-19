@@ -1,0 +1,21 @@
+{
+  "name": "claude-skills-to-kiro-powers",
+  "version": "0.1.0",
+  "description": "Claude Code Skills を Kiro Powers に変換する CLI ツール",
+  "type": "module",
+  "bin": {
+    "skills-to-powers": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "bun run src/cli.ts",
+    "build": "bun build src/cli.ts --outfile dist/cli.js --target bun",
+    "test": "bun test",
+    "clean": "rm -rf dist test-output*"
+  },
+  "dependencies": {
+    "yaml": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
