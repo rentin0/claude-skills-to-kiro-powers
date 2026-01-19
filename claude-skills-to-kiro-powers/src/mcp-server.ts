@@ -16,6 +16,11 @@ import {
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { SkillsConverter } from "./converter";
 import { SkillsDownloader } from "./downloader";
+import { ZipHandler } from "./zip-handler";
+import { JpDescriptionGenerator } from "./jp-description-generator";
+import { join } from "path";
+import { expandHome } from "./utils";
+import { writeFileSync } from "fs";
 
 // MCP サーバーのインスタンスを作成
 const server = new Server({
@@ -46,6 +51,26 @@ const tools: Tool[] = [
     },
   },
   {
+    name: "convert_skill_from_zip",
+    description:
+      "skill.zip ファイルを解凍して、Kiro Power に変換します。自動的に日本語説明ファイルも生成します。",
+    inputSchema: {
+      type: "object",
+      properties: {
+        zip_path: {
+          type: "string",
+          description: "skill.zip ファイルのパス",
+        },
+        output_dir: {
+          type: "string",
+          description:
+            "出力先ディレクトリ（オプション、デフォルト: ~/.kiro/powers/<skill-name>）",
+        },
+      },
+      required: ["zip_path"],
+    },
+  },
+  {
     name: "download_and_convert_skill",
     description:
       "skillsmp.com からスキルをダウンロードして、Kiro Power に変換します。",
@@ -63,6 +88,25 @@ const tools: Tool[] = [
         },
       },
       required: ["skill_name"],
+    },
+  },
+  {
+    name: "translate_to_japanese",
+    description:
+      "POWER.md の内容を日本語に翻訳して、.jp-description.md ファイルを生成します。Claude に翻訳を依頼してください。",
+    inputSchema: {
+      type: "object",
+      properties: {
+        power_path: {
+          type: "string",
+          description: "POWER.md が配置されているディレクトリパス",
+        },
+        translated_content: {
+          type: "string",
+          description: "Claude が翻訳した日本語の内容",
+        },
+      },
+      required: ["power_path", "translated_content"],
     },
   },
   {
@@ -93,13 +137,48 @@ server.setRequestHandler(
         const outputDir = (args.output_dir as string) || undefined;
 
         const converter = new SkillsConverter();
-        await converter.convert(skillPath, outputDir || `~/.kiro/powers/${skillPath.split("/").pop()}`);
+        const finalOutputDir = outputDir || `~/.kiro/powers/${skillPath.split("/").pop()}`;
+        await converter.convert(skillPath, finalOutputDir);
+
+        // 日本語説明ファイルを生成
+        const jpGenerator = new JpDescriptionGenerator();
+        jpGenerator.generateJpDescription(expandHome(finalOutputDir));
 
         return {
           content: [
             {
               type: "text",
-              text: `✅ スキルを正常に変換しました。\n出力先: ${outputDir || `~/.kiro/powers/${skillPath.split("/").pop()}`}`,
+              text: `✅ スキルを正常に変換しました。\n出力先: ${finalOutputDir}\n日本語説明: ${finalOutputDir}/${skillPath.split("/").pop()}.jp-description.md`,
+            } as TextContent,
+          ],
+        };
+      } else if (name === "convert_skill_from_zip") {
+        const zipPath = args.zip_path as string;
+        const outputDir = (args.output_dir as string) || undefined;
+
+        // ZIP ファイルを解凍
+        const zipHandler = new ZipHandler();
+        const tempDir = `/tmp/skill-extract-${Date.now()}`;
+        const extractedPath = await zipHandler.extractZip(zipPath, tempDir);
+
+        // 抽出されたスキルを変換
+        const converter = new SkillsConverter();
+        const skillName = extractedPath.split("/").pop() || "skill";
+        const finalOutputDir = outputDir || `~/.kiro/powers/${skillName}`;
+        await converter.convert(extractedPath, finalOutputDir);
+
+        // 日本語説明ファイルを生成
+        const jpGenerator = new JpDescriptionGenerator();
+        jpGenerator.generateJpDescription(expandHome(finalOutputDir));
+
+        // 一時ディレクトリをクリーンアップ
+        await zipHandler.cleanup(tempDir);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `✅ ZIP ファイルを解凍・変換しました。\n出力先: ${finalOutputDir}\n日本語説明: ${finalOutputDir}/${skillName}.jp-description.md`,
             } as TextContent,
           ],
         };
@@ -114,11 +193,34 @@ server.setRequestHandler(
         const finalOutputDir = outputDir || `~/.kiro/powers/${skillName}`;
         await converter.convert(skillPath, finalOutputDir);
 
+        // 日本語説明ファイルを生成
+        const jpGenerator = new JpDescriptionGenerator();
+        jpGenerator.generateJpDescription(expandHome(finalOutputDir));
+
         return {
           content: [
             {
               type: "text",
-              text: `✅ スキルをダウンロード・変換しました。\n出力先: ${finalOutputDir}`,
+              text: `✅ スキルをダウンロード・変換しました。\n出力先: ${finalOutputDir}\n日本語説明: ${finalOutputDir}/${skillName}.jp-description.md`,
+            } as TextContent,
+          ],
+        };
+      } else if (name === "translate_to_japanese") {
+        const powerPath = args.power_path as string;
+        const translatedContent = args.translated_content as string;
+
+        const expandedPowerPath = expandHome(powerPath);
+        const skillName = expandedPowerPath.split("/").pop() || "skill";
+        const jpDescriptionPath = join(expandedPowerPath, `${skillName}.jp-description.md`);
+
+        // 翻訳済みコンテンツを保存
+        writeFileSync(jpDescriptionPath, translatedContent);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `✅ 日本語説明ファイルを生成しました。\n保存先: ${jpDescriptionPath}`,
             } as TextContent,
           ],
         };
