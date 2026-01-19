@@ -10,6 +10,7 @@ Claude Code Skills を Kiro Powers に変換する CLI ツール（MVP）
 - 🏠 **ホームディレクトリ対応** - `~/.kiro/powers/` に自動配置
 - 🔗 **一括変換** - 複数のスキルを同時に変換
 - 🎨 **豪華な TUI** - Ink を使用した美しいターミナルインターフェース
+- 🤖 **MCP サーバー** - Model Context Protocol インターフェース
 
 ## インストール
 
@@ -54,7 +55,18 @@ bun run src/cli-interactive.tsx
 - skillsmp.com からインストール・変換
 - 出力先ディレクトリを指定
 
-### 4. 複数のスキルを一括変換
+### 4. MCP サーバー
+
+Claude Code や Kiro IDE から MCP インターフェース経由で使用できます。
+
+詳細は [MCP_SETUP.md](./MCP_SETUP.md) を参照してください。
+
+```bash
+# MCP サーバーを起動
+bun run dev:mcp
+```
+
+### 5. 複数のスキルを一括変換
 
 ```bash
 bun run scripts/batch-convert.ts database-query-helper code-review-assistant
@@ -77,6 +89,9 @@ bun dist/cli-tui.js --convert ./my-skill
 
 # インタラクティブ TUI
 bun dist/cli-interactive.js
+
+# MCP サーバー
+bun dist/mcp-server.js
 ```
 
 ## 変換ルール

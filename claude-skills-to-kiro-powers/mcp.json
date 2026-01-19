@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "claude-skills-to-kiro-powers": {
+      "command": "bun",
+      "args": ["run", "src/mcp-server.ts"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "convert_skill",
+        "download_and_convert_skill",
+        "list_available_skills"
+      ]
+    }
+  }
+}

@@ -12,11 +12,13 @@
     "dev": "bun run src/cli.ts",
     "dev:tui": "bun run src/cli-tui.tsx",
     "dev:interactive": "bun run src/cli-interactive.tsx",
-    "build": "bun build src/cli.ts --outfile dist/cli.js --target bun && bun build src/cli-tui.tsx --outfile dist/cli-tui.js --target bun && bun build src/cli-interactive.tsx --outfile dist/cli-interactive.js --target bun",
+    "dev:mcp": "bun run src/mcp-server.ts",
+    "build": "bun build src/cli.ts --outfile dist/cli.js --target bun && bun build src/cli-tui.tsx --outfile dist/cli-tui.js --target bun && bun build src/cli-interactive.tsx --outfile dist/cli-interactive.js --target bun && bun build src/mcp-server.ts --outfile dist/mcp-server.js --target bun",
     "test": "bun test",
     "clean": "rm -rf dist test-output*"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.2",
     "ink": "^6.6.0",
     "ink-select-input": "^6.2.0",
     "ink-spinner": "^5.0.0",
