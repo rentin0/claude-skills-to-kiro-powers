@@ -185,19 +185,25 @@ author: Claude Code Skills
 
 1. Kiro IDE で Powers パネルを開く
 2. 「Import from URL」を選択
-3. 以下の URL を入力：
+3. 以下の GitHub リポジトリ URL を入力：
 
 ```
-https://raw.githubusercontent.com/rentin0/claude-skills-to-kiro-powers/main/POWER.md
+https://github.com/rentin0/claude-skills-to-kiro-powers
 ```
+
+Kiro が自動的にリポジトリ内の `POWER.md` を検出してインストールします。
 
 または、手動でインストールする場合：
 
 ```bash
 # ~/.kiro/powers/ ディレクトリに配置
 mkdir -p ~/.kiro/powers/claude-skills-to-kiro-powers
+
+# POWER.md と mcp.json をダウンロード
 curl -o ~/.kiro/powers/claude-skills-to-kiro-powers/POWER.md \
-  https://raw.githubusercontent.com/rentin0/claude-skills-to-kiro-powers/main/POWER.md
+  https://raw.githubusercontent.com/rentin0/claude-skills-to-kiro-powers/powers/POWER.md
+curl -o ~/.kiro/powers/claude-skills-to-kiro-powers/mcp.json \
+  https://raw.githubusercontent.com/rentin0/claude-skills-to-kiro-powers/powers/mcp.json
 ```
 
 ### 使用可能なツール
