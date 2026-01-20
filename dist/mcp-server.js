@@ -23050,6 +23050,10 @@ import { writeFileSync as writeFileSync4 } from "fs";
 var server = new Server({
   name: "claude-skills-to-kiro-powers",
   version: "0.1.0"
+}, {
+  capabilities: {
+    tools: {}
+  }
 });
 var tools = [
   {

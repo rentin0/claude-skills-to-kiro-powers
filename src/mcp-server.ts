@@ -23,10 +23,17 @@ import { expandHome } from "./utils";
 import { writeFileSync } from "fs";
 
 // MCP サーバーのインスタンスを作成
-const server = new Server({
-  name: "claude-skills-to-kiro-powers",
-  version: "0.1.0",
-});
+const server = new Server(
+  {
+    name: "claude-skills-to-kiro-powers",
+    version: "0.1.0",
+  },
+  {
+    capabilities: {
+      tools: {},
+    },
+  }
+);
 
 // ツール定義
 const tools: Tool[] = [
