@@ -6,7 +6,8 @@
   "bin": {
     "skills-to-powers": "./dist/cli.js",
     "skills-to-powers-tui": "./dist/cli-tui.js",
-    "skills-to-powers-interactive": "./dist/cli-interactive.js"
+    "skills-to-powers-interactive": "./dist/cli-interactive.js",
+    "claude-skills-to-kiro-powers": "./dist/mcp-server.js"
   },
   "scripts": {
     "dev": "bun run src/cli.ts",

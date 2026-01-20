@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "claude-skills-to-kiro-powers": {
-      "command": "bun",
-      "args": ["run", "src/mcp-server.ts"],
+      "command": "npx",
+      "args": ["-y", "git+https://github.com/rentin0/claude-skills-to-kiro-powers.git"],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
