@@ -3,7 +3,7 @@ node_modules/
 bun.lock
 
 # ビルド出力
-dist/
+# dist/ は npx でインストールする際に必要なので含める
 build/
 
 # テスト出力
