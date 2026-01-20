@@ -8,7 +8,18 @@ keywords:
   - 変換
   - 自動化
   - スキル管理
-author: Claude Code Skills to Kiro Powers
+  - skill
+  - power
+  - convert
+author: rentin0
+mcpServers:
+  claude-skills-to-kiro-powers:
+    command: npx
+    args:
+      - "-y"
+      - "git+https://github.com/rentin0/claude-skills-to-kiro-powers.git"
+    env:
+      FASTMCP_LOG_LEVEL: ERROR
 ---
 
 # Claude Code Skills to Kiro Powers 変換ツール

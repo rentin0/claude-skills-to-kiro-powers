@@ -173,6 +173,70 @@ author: Claude Code Skills
 
 - [ ] skillsmp.com API の実装確認と統合テスト
 - [ ] エラーハンドリングの強化
-- [ ] npm パッケージ化
+- [x] npm パッケージ化
 - [ ] GitHub Actions による自動テスト
 - [ ] 逆変換機能（Powers → Skills）の実装
+
+## Kiro Power として使用する方法
+
+このツール自体を Kiro Power としてインストールして使用できます。
+
+### インストール方法
+
+1. Kiro IDE で Powers パネルを開く
+2. 「Import from URL」を選択
+3. 以下の URL を入力：
+
+```
+https://raw.githubusercontent.com/rentin0/claude-skills-to-kiro-powers/main/POWER.md
+```
+
+または、手動でインストールする場合：
+
+```bash
+# ~/.kiro/powers/ ディレクトリに配置
+mkdir -p ~/.kiro/powers/claude-skills-to-kiro-powers
+curl -o ~/.kiro/powers/claude-skills-to-kiro-powers/POWER.md \
+  https://raw.githubusercontent.com/rentin0/claude-skills-to-kiro-powers/main/POWER.md
+```
+
+### 使用可能なツール
+
+Power をインストールすると、以下の MCP ツールが使用可能になります：
+
+| ツール名 | 説明 |
+|---------|------|
+| `convert_skill` | ローカルの SKILL.md を POWER.md に変換 |
+| `download_and_convert_skill` | skillsmp.com からスキルをダウンロードして変換 |
+| `list_available_skills` | 利用可能なスキル一覧を取得 |
+
+### 使用例
+
+Kiro のチャットで以下のように指示できます：
+
+```
+# ローカルのスキルを変換
+「./my-skill ディレクトリのスキルを Power に変換して」
+
+# skillsmp.com からインストール
+「database-query-helper スキルをダウンロードして Power に変換して」
+
+# 利用可能なスキル一覧を確認
+「利用可能な Claude Code Skills を教えて」
+```
+
+### 手動で mcp.json に追加する場合
+
+```json
+{
+  "mcpServers": {
+    "claude-skills-to-kiro-powers": {
+      "command": "npx",
+      "args": ["-y", "git+https://github.com/rentin0/claude-skills-to-kiro-powers.git"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    }
+  }
+}
+```
