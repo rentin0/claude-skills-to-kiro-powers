@@ -1,17 +1,19 @@
 ---
-name: claude-skills-to-kiro-powers
-displayName: Claude Code Skills to Kiro Powers 変換ツール
-description: Claude Code Skills を Kiro Powers に自動変換するツール。skill.zip をアップロードすると、POWER.md に変換し、日本語説明ファイルも自動生成します。
+name: "claude-skills-to-kiro-powers"
+displayName: "Claude Code Skills to Kiro Powers 変換ツール"
+description: "Claude Code Skills を Kiro Powers に自動変換するツール。skill.zip をアップロードすると、POWER.md に変換し、日本語説明ファイルも自動生成します。"
 keywords:
-  - Claude Code Skills
-  - Kiro Powers
-  - 変換
-  - 自動化
-  - スキル管理
-  - skill
-  - power
-  - convert
-author: rentin0
+  [
+    "Claude Code Skills",
+    "Kiro Powers",
+    "変換",
+    "自動化",
+    "スキル管理",
+    "skill",
+    "power",
+    "convert",
+  ]
+author: "rentin0"
 ---
 
 # Claude Code Skills to Kiro Powers 変換ツール
