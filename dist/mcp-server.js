@@ -23138,9 +23138,9 @@ var tools = [
     }
   }
 ];
-server.setRequestHandler("tools/call", async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
-    const { name, arguments: args } = request;
+    const { name, arguments: args } = request.params;
     if (name === "convert_skill") {
       const skillPath = args.skill_path;
       const outputDir = args.output_dir || undefined;
@@ -23248,7 +23248,7 @@ server.setRequestHandler("tools/call", async (request) => {
     };
   }
 });
-server.setRequestHandler("tools/list", async () => {
+server.setRequestHandler(ListToolsRequestSchema, async () => {
   return { tools };
 });
 async function main() {

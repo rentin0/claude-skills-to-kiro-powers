@@ -7,13 +7,13 @@
  * MCP（Model Context Protocol）インターフェースを提供します。
  */
 
-import {
-  Server,
-  Tool,
-  TextContent,
-  ErrorContent,
-} from "@modelcontextprotocol/sdk/server/index.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+  Tool,
+} from "@modelcontextprotocol/sdk/types.js";
 import { SkillsConverter } from "./converter";
 import { SkillsDownloader } from "./downloader";
 import { ZipHandler } from "./zip-handler";
@@ -126,11 +126,9 @@ const tools: Tool[] = [
 ];
 
 // ツール実行ハンドラー
-server.setRequestHandler(
-  "tools/call",
-  async (request: { name: string; arguments: Record<string, unknown> }) => {
-    try {
-      const { name, arguments: args } = request;
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  try {
+    const { name, arguments: args } = request.params;
 
       if (name === "convert_skill") {
         const skillPath = args.skill_path as string;
@@ -147,9 +145,9 @@ server.setRequestHandler(
         return {
           content: [
             {
-              type: "text",
+              type: "text" as const,
               text: `✅ スキルを正常に変換しました。\n出力先: ${finalOutputDir}\n日本語説明: ${finalOutputDir}/${skillPath.split("/").pop()}.jp-description.md`,
-            } as TextContent,
+            },
           ],
         };
       } else if (name === "convert_skill_from_zip") {
@@ -177,9 +175,9 @@ server.setRequestHandler(
         return {
           content: [
             {
-              type: "text",
+              type: "text" as const,
               text: `✅ ZIP ファイルを解凍・変換しました。\n出力先: ${finalOutputDir}\n日本語説明: ${finalOutputDir}/${skillName}.jp-description.md`,
-            } as TextContent,
+            },
           ],
         };
       } else if (name === "download_and_convert_skill") {
@@ -200,9 +198,9 @@ server.setRequestHandler(
         return {
           content: [
             {
-              type: "text",
+              type: "text" as const,
               text: `✅ スキルをダウンロード・変換しました。\n出力先: ${finalOutputDir}\n日本語説明: ${finalOutputDir}/${skillName}.jp-description.md`,
-            } as TextContent,
+            },
           ],
         };
       } else if (name === "translate_to_japanese") {
@@ -219,18 +217,18 @@ server.setRequestHandler(
         return {
           content: [
             {
-              type: "text",
+              type: "text" as const,
               text: `✅ 日本語説明ファイルを生成しました。\n保存先: ${jpDescriptionPath}`,
-            } as TextContent,
+            },
           ],
         };
       } else if (name === "list_available_skills") {
         return {
           content: [
             {
-              type: "text",
+              type: "text" as const,
               text: "⚠️  skillsmp.com API の実装がまだ完了していません。\n現在はローカルのスキルファイルからの変換に対応しています。",
-            } as TextContent,
+            },
           ],
         };
       }
@@ -238,18 +236,18 @@ server.setRequestHandler(
       return {
         content: [
           {
-            type: "text",
+            type: "text" as const,
             text: `❌ 不明なツール: ${name}`,
-          } as TextContent,
+          },
         ],
       };
     } catch (error) {
       return {
         content: [
           {
-            type: "text",
+            type: "text" as const,
             text: `❌ エラーが発生しました: ${error instanceof Error ? error.message : String(error)}`,
-          } as TextContent,
+          },
         ],
       };
     }
@@ -257,7 +255,7 @@ server.setRequestHandler(
 );
 
 // ツール一覧を返すハンドラー
-server.setRequestHandler("tools/list", async () => {
+server.setRequestHandler(ListToolsRequestSchema, async () => {
   return { tools };
 });
 
